@@ -22,6 +22,15 @@ There will be a prompt to enter plaintext that will be converted to MD5 for sear
 Results of the search will be shown.
 The script can be modified to create more results or less as needed
 
+# Use wordlist2hash.sh to covert wordlist to SHA1 or MD5
+
+Type: chmod +x wordlist2hash.sh
+
+Then run: ./wordlist2hash.sh
+
+Follow instructions and choose a MD5 or SHA1 hash as well as a filename. 
+This script will generate a new wordlist that includes a line by line hash:plaintext format
+
 # Use htcheck.sh to search for plaintext passwords in the generated table
 Type: chmod +x htcheck.sh
 
