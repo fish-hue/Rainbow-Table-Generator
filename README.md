@@ -1,4 +1,4 @@
-# hash-tools
+# Welcome to hash-tools.sh
 This is a work in progress. 
 The goal is to be able to gather Hashes, generate custom Rainbow Tables, then search them with the hashes collected to see if a password can be found.
 Right now my focus is on SHA1 and MD5 hashes
