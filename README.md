@@ -9,9 +9,10 @@ python hashimo-sha1
 -or-
 python hashimo-md5.py
 # Follow prompts to create a custom table
-This will create a *.txt file full of MD5 hashes and corresponging plaintext values.
-Theere will be a prompt to enter plaintext that will be converted to MD5 for search in the created table
+This will create a .txt file full of MD5 hashes and corresponging plaintext values.
+There will be a prompt to enter plaintext that will be converted to MD5 for search in the created table
 Results of the search will be shown.
+*script can be modified to create more results or less as needed
 
 NOT DONE YET | TO-DO:
 
