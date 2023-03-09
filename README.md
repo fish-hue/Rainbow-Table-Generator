@@ -6,6 +6,8 @@ A SHA1 and MD5 script to check a hash against a created table for plaintext will
 
 # Select hashimo-sha1.py or hashimo-md5.py and execute as follows:
 python hashimo-sha1
+-or-
+python hashimo-md5.py
 # Follow prompts to create a custom table
 This will create a *.txt file full of MD5 hashes and corresponging plaintext values.
 Theere will be a prompt to enter plaintext that will be converted to MD5 for search in the created table
