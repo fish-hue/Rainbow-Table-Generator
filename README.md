@@ -18,11 +18,9 @@ There will be a prompt to enter plaintext that will be converted to MD5 for sear
 Results of the search will be shown.
 The script can be modified to create more results or less as needed
 
-# NOT DONE YET | TO-DO:
+# use htcheck.sh to search for plaintext passwords in the generated table
+Type: chmod +x htcheck.sh
 
-Create a table reading script that will take a hash input
-Then check the input against the data in a generated table
-Finally print the plaintext value found, if any
-I will make duplicate scripts, one for MD5 and one for SHA1
+Then run: ./htcheck.sh
 
 
