@@ -30,41 +30,47 @@ char_set = char_sets[list(char_sets.keys())[choice-1]]
 
 plaintext_length = int(input("Enter the desired length of plaintexts: "))
 
-# Generate a list of all possible plaintext values
-plaintexts = [''.join(i) for i in itertools.product(char_set, repeat=plaintext_length)]
+# Generate a set of all possible plaintext values
+plaintexts = set(''.join(i) for i in itertools.product(char_set, repeat=plaintext_length))
 
 # Initialize the table
 table = {}
 # Generate the chains
 for i in range(num_chains):
-    chain_start = plaintexts[i]
+    chain_start = plaintexts.pop() # use pop to remove plaintext from set
     chain_end = hashlib.sha1(chain_start.encode()).hexdigest()
-    plaintext = chain_start # save the plaintext for this chain
+    plaintext_start = chain_start # save plaintext for chain start
+    plaintext_end = None # initialize plaintext for chain end
     for j in range(1, plaintext_length):
         chain_start = hashlib.sha1(chain_start.encode()).hexdigest()
-        chain_end = hashlib.sha1(chain_end.encode()).hexdigest()
         if chain_end not in table:
-            table[chain_end] = (chain_start, plaintext) # include plaintext value in output
+            plaintext_end = chain_start # save plaintext for chain end
+            table[chain_end] = (plaintext_start, plaintext_end) # save plaintexts for chain start and end
             break
-        plaintext = chain_start # update the plaintext value for the next step in the chain
+    if plaintext_end is None: # if chain was not completed, add plaintexts to set
+        plaintexts.add(plaintext_start)
 
 # Prompt the user to enter a filename to save the rainbow table
 filename = input("Enter a filename to save the rainbow table: ")
 
-# Save the table to the specified file
+# Save the table to the specified file in the desired format
 with open(filename, "w") as f:
-    for end, start in table.items():
-        plaintext = start # set the plaintext to the start of the chain
-        f.write(f"{end},{start},{plaintext}\n") # include plaintext value in output
+    for end, (start, plaintext) in table.items():
+        f.write(f"{end}:{start}:{plaintext}\n")
 
-def is_in_table(password_hash, table):
+def find_plaintext(password_hash, table):
     for i in range(plaintext_length):
         password = password_hash
         for j in range(i, plaintext_length):
             password = hashlib.sha1(password.encode()).hexdigest()
             if password in table:
-                return table[password]
-    return None
+                plaintext_start, plaintext_end = table[password]
+                for k in range(j, plaintext_length):
+                    password = hashlib.sha1(password.encode()).hexdigest()
+                    if password == plaintext_end:
+                        return plaintext_start, password_hash # Return both the plaintext and the hash
+                break
+    return None, None # Return None if the plaintext is not found
 
 # Ask the user if they want to enter a custom password to be hashed
 custom_choice = input("Do you want to hash a custom password? (y/n) ")
@@ -91,9 +97,9 @@ print(f"The SHA-1 hash of the password is: {password_hash}")
 
 # Check if the password hash is in the rainbow table
 if password_hash in table:
-    plaintext = is_in_table(password_hash, table, plaintext_length)
+    plaintext, _hash = find_plaintext(password_hash, table) # Assign the plaintext and hash values
     if plaintext is not None:
-        print(f"The password is: {plaintext}, Hash is: {password_hash}")
+        print(f"The password is: {plaintext}, Hash is: {_hash}")
     else:
         print("Unable to find the password in the rainbow table")
 else:
