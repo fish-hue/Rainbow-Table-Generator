@@ -78,10 +78,19 @@ if custom_choice.lower() == "n":
 elif custom_choice.lower() == "y":
     # Ask the user to enter a password to hash
     password = input("Enter a password to hash: ")
-
-    # Hash the password
+# Hash the password
     password_hash = hashlib.sha1(password.encode()).hexdigest()
 
     print(f"The SHA-1 hash of the password is: {password_hash}")
 else:
     print("Invalid input. Please enter 'y' or 'n'.")
+
+# Check if the password hash is in the rainbow table
+if password_hash in table:
+    plaintext = is_in_table(password_hash, table)
+    if plaintext is not None:
+        print(f"The password is: {plaintext}")
+    else:
+        print("Unable to find the password in the rainbow table")
+else:
+    print("The password hash is not in the rainbow table.")
