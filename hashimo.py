@@ -15,6 +15,8 @@ char_sets = {
     "uppercase and digits": "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
     "lowercase, uppercase, and digit combo": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
     "just special": "!@#$%^&*()_+-=[]{}|;:,.<>?/~`",
+    "just special and lowercase": "abcdefghijklmnopqrstuvwxyz!@#$%^&*()_+-=[]{}|;:,.<>?/~`",
+    "just special and uppercase": "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+-=[]{}|;:,.<>?/~`",
     "all": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?/~`"
 }
 
@@ -33,16 +35,18 @@ plaintexts = [''.join(i) for i in itertools.product(char_set, repeat=plaintext_l
 
 # Initialize the table
 table = {}
-
 # Generate the chains
 for i in range(num_chains):
     chain_start = plaintexts[i]
     chain_end = hashlib.sha1(chain_start.encode()).hexdigest()
+    plaintext = chain_start # save the plaintext for this chain
     for j in range(1, plaintext_length):
         chain_start = hashlib.sha1(chain_start.encode()).hexdigest()
         chain_end = hashlib.sha1(chain_end.encode()).hexdigest()
         if chain_end not in table:
-            table[chain_end] = chain_start
+            table[chain_end] = (chain_start, plaintext) # include plaintext value in output
+            break
+        plaintext = chain_start # update the plaintext value for the next step in the chain
 
 # Prompt the user to enter a filename to save the rainbow table
 filename = input("Enter a filename to save the rainbow table: ")
@@ -50,7 +54,8 @@ filename = input("Enter a filename to save the rainbow table: ")
 # Save the table to the specified file
 with open(filename, "w") as f:
     for end, start in table.items():
-        f.write(f"{end},{start}\n")
+        plaintext = start # set the plaintext to the start of the chain
+        f.write(f"{end},{start},{plaintext}\n") # include plaintext value in output
 
 def is_in_table(password_hash, table):
     for i in range(plaintext_length):
@@ -78,18 +83,17 @@ if custom_choice.lower() == "n":
 elif custom_choice.lower() == "y":
     # Ask the user to enter a password to hash
     password = input("Enter a password to hash: ")
-# Hash the password
-    password_hash = hashlib.sha1(password.encode()).hexdigest()
 
-    print(f"The SHA-1 hash of the password is: {password_hash}")
-else:
-    print("Invalid input. Please enter 'y' or 'n'.")
+# Hash the password
+password_hash = hashlib.sha1(password.encode()).hexdigest()
+
+print(f"The SHA-1 hash of the password is: {password_hash}")
 
 # Check if the password hash is in the rainbow table
 if password_hash in table:
-    plaintext = is_in_table(password_hash, table)
+    plaintext = is_in_table(password_hash, table, plaintext_length)
     if plaintext is not None:
-        print(f"The password is: {plaintext}")
+        print(f"The password is: {plaintext}, Hash is: {password_hash}")
     else:
         print("Unable to find the password in the rainbow table")
 else:
