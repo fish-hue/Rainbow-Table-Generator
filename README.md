@@ -23,7 +23,7 @@ There will be a prompt to enter plaintext that will be converted to MD5 for sear
 Results of the search will be shown.
 The script can be modified to create more results or less as needed
 
-# use htcheck.sh to search for plaintext passwords in the generated table
+# Use htcheck.sh to search for plaintext passwords in the generated table
 Type: chmod +x htcheck.sh
 
 Then run: ./htcheck.sh
