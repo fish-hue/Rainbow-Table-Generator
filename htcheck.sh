@@ -15,7 +15,7 @@ do
     field3=$(echo $line | cut -d':' -f3)
 
     # check if the hash matches the third field
-    if [ "$field3" == "$searchterm" ]
+    if [ "$field1" == "$searchterm" ]
     then
         # if there's a match, print the second field and exit the loop
         echo "Password found: $field2"
