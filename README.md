@@ -2,13 +2,17 @@
 This is a work in progress. 
 The goal is to be able to gather Hashes, generate custom Rainbow Tables, then search them with the hashes collected to see if a password can be found.
 Right now my focus is on SHA1 and MD5 hashes
+There are serveral tools to please read below
 
-# Collect hashes using hash-collector.py
+# Use RainbowKingMD5.py All in One Hash Collector, Table Generator, and Cracker for MD5 hashes
+python RainbowKingMD5.py
+
+# Only Collect hashes using hash-collector.py
 python hash-collector.py
 
 This will search a URL for all hashes in any format and display them with the option to save as a file
 
-# Create a Rainbow Table using Hashimo
+# Only Create a Rainbow Table using Hashimo
 Select hashimo-sha1.py or hashimo-md5.py and execute as follows:
 
 Type: python hashimo-sha1
